@@ -27,3 +27,5 @@ Route::post('/allrequest/{name}/{age}',  [DemoController::class,'extractAllReque
 Route::post('/fileupload',  [DemoController::class,'FileUpload']);
 Route::post('/requestIp',  [DemoController::class,'requestIp']);
 Route::post('/cookieManage',  [DemoController::class,'cookieManage']);
+Route::get('/responseMultiple',  [DemoController::class,'responseMultiple']);
+Route::get('/JsonResponse',  [DemoController::class,'JsonResponse']);

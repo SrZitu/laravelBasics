@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class DemoController extends Controller
@@ -101,5 +102,38 @@ to get the name and age of the user who submitted the request.Finally, it return
     function cookieManage(Request $request): array
     {
         return $request->cookie();
+    }
+    /*============================Response  Formate========================*/
+
+    function responseMultiple(Request $request): int|string|array|bool|null
+    {
+        //return true;
+        //multiple array
+
+        //returing this array as json as a response
+        //return response()->json(['name'=>"sakib","age"=>13]);
+
+        return array(
+            array(
+                "name" => "sazzad",
+                "age" => "30"
+            ),
+
+            array(
+                "name" => "zitu",
+                "age" => "29"
+            )
+
+
+
+        );
+    }
+    
+    function JsonResponse(): JsonResponse
+    {
+        $code = 201;
+        $msg = "success";
+        $data = ['name' => "sakib", "age" => 13];
+        return response()->json(['msg' => $msg, "data" => $data], $code);
     }
 }
