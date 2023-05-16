@@ -75,11 +75,31 @@ to get the name and age of the user who submitted the request.Finally, it return
             'extension' => $extension,
         );
     }
+
     function FileUpload(Request $request): bool
     {
         $img = $request->file('photo');
-        $photoFIle=$img->storeAs('upload',$img->getClientOriginalName());
-        $photoFIle=$img->move(public_path('upload/image'),$img->getClientOriginalName());
-       return true;
+        $photoFIle = $img->storeAs('upload', $img->getClientOriginalName());
+        $photoFIle = $img->move(public_path('upload/image'), $img->getClientOriginalName());
+        return true;
+    }
+
+    function requestIp(Request $request): int
+    {
+        //return which types of contents are allowed. */* means all content types are allowed.
+        // return $request->getAcceptableContentTypes();
+
+        //return the ip address of the client
+        // return $request->ip();
+
+        if ($request->accepts(['application/json'])) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+    function cookieManage(Request $request): array
+    {
+        return $request->cookie();
     }
 }

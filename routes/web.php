@@ -29,3 +29,5 @@ Route::post('/headreq',  [DemoController::class,'requestHeader']);
 Route::post('/allrequest/{name}/{age}',  [DemoController::class,'extractAllRequest']);
 Route::post('/formdata',  [DemoController::class,'MultipartFormData']);
 Route::post('/fileupload',  [DemoController::class,'FileUpload']);
+Route::post('/requestIp',  [DemoController::class,'requestIp']);
+Route::post('/cookieManage',  [DemoController::class,'cookieManage']);
