@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DemoController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,6 +22,10 @@ Route::get('/hello', function () {
     return "Hello World";
 });
 
-
-
-
+Route::get('/demoaction',  [DemoController::class,'demoAction']);
+Route::get('/demoaction/{name}/{age}',  [DemoController::class,'demoInfo']);
+Route::post('/demoJsonBody',  [DemoController::class,'requestBody']);
+Route::post('/headreq',  [DemoController::class,'requestHeader']);
+Route::post('/allrequest/{name}/{age}',  [DemoController::class,'extractAllRequest']);
+Route::post('/formdata',  [DemoController::class,'MultipartFormData']);
+Route::post('/fileupload',  [DemoController::class,'FileUpload']);

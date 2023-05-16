@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DemoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +18,11 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('/demoaction',  [DemoController::class,'demoAction']);
+Route::get('/demoaction/{name}/{age}',  [DemoController::class,'demoInfo']);
+Route::post('/demoJsonBody',  [DemoController::class,'requestBody']);
+Route::post('/headreq',  [DemoController::class,'requestHeader']);
+Route::post('/allrequest/{name}/{age}',  [DemoController::class,'extractAllRequest']);
+Route::post('/fileupload',  [DemoController::class,'FileUpload']);
+
