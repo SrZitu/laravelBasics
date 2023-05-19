@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 
 class DemoController extends Controller
 {
@@ -99,13 +100,10 @@ to get the name and age of the user who submitted the request.Finally, it return
         } else {
             return 0;
         }
-
-
     }
     function cookieManage(Request $request): array
     {
-      return $request->cookie();
-
+        return $request->cookie();
     }
     /*============================Response  Formate========================*/
 
@@ -143,32 +141,80 @@ to get the name and age of the user who submitted the request.Finally, it return
 
     // redirected to demoaction route
 
-    function redirectResponse(){
-       return  redirect('/demoaction');
+    function redirectResponse()
+    {
+        return  redirect('/demoaction');
     }
 
-    function fileBinary(){
-        $photoFIle='upload/image/BMI-Calculator.png';
+    function fileBinary()
+    {
+        $photoFIle = 'upload/image/BMI-Calculator.png';
         return response()->file($photoFIle);
     }
 
-    function fileDOwnload(){
-        $photoFIle='upload/image/BMI-Calculator.png';
+    function fileDOwnload()
+    {
+        $photoFIle = 'upload/image/BMI-Calculator.png';
         return response()->download($photoFIle);
     }
 
     //generating response cookie
-    function responseCookie(){
-        $name="response_cookie";
-        $value="srz13";
-        $minutes=140;
-        $path="/";
-        $domain=$_SERVER['SERVER_NAME'];
-        $secure=false;
-        $httpOnly=true;
+    function responseCookie()
+    {
+        $name = "response_cookie";
+        $value = "srz13";
+        $minutes = 140;
+        $path = "/";
+        $domain = $_SERVER['SERVER_NAME'];
+        $secure = false;
+        $httpOnly = true;
 
         return response('Hello World')->cookie(
-            $name, $value, $minutes, $path, $domain, $secure, $httpOnly
+            $name,
+            $value,
+            $minutes,
+            $path,
+            $domain,
+            $secure,
+            $httpOnly
         );
+    }
+
+    //ataching headers to response
+    function attachHeaderResponse()
+    {
+        return response("hello")
+            ->header('header 1', '111')
+            ->header('header 2', '112');
+    }
+
+    function returnView()
+    {
+        //if my view is in specific folder.then give the folder and . then the blade view page name
+        //here folder name page and added .index to indicate that it referencing that folder's index view.
+        //if we add anoter folder called primary in page folder then the return would be
+        //return view('page.primary.index');
+        return view('page.index');
+    }
+
+    //laravel log
+    /*
+    To help you learn more about what's happening within your application,
+    Laravel provides robust logging services that allow you to log messages to files,
+    the system error log, and even to Slack to notify your entire team.
+    */
+    function logs(Request $request):int
+
+    {
+        $sum = $request->num1 + $request->num2;
+        Log::info($sum);
+        Log::emergency($sum);
+        Log::alert($sum);
+        Log::critical($sum);
+        Log::error($sum);
+        Log::warning($sum);
+        Log::notice($sum);
+        Log::debug($sum);
+        return $sum;
     }
 }
