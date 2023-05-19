@@ -33,3 +33,7 @@ Route::post('/requestIp',  [DemoController::class,'requestIp']);
 Route::post('/cookieManage',  [DemoController::class,'cookieManage']);
 Route::get('/responseMultiple',  [DemoController::class,'responseMultiple']);
 Route::get('/JsonResponse',  [DemoController::class,'JsonResponse']);
+Route::get('/book',  [DemoController::class,'redirectResponse']);
+Route::get('/fileBinary',  [DemoController::class,'fileBinary']);
+Route::get('/fileDOwnload',  [DemoController::class,'fileDOwnload']);
+Route::get('/responseCookie',  [DemoController::class,'responseCookie']);

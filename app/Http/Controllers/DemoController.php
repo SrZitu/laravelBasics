@@ -28,6 +28,7 @@ to get the name and age of the user who submitted the request.Finally, it return
     {
 
         //returning all the json data as array
+        //if we want  to save data from json body then we use $request->input
         return  $request->input();
     }
 
@@ -98,10 +99,13 @@ to get the name and age of the user who submitted the request.Finally, it return
         } else {
             return 0;
         }
+
+
     }
     function cookieManage(Request $request): array
     {
-        return $request->cookie();
+      return $request->cookie();
+
     }
     /*============================Response  Formate========================*/
 
@@ -128,12 +132,43 @@ to get the name and age of the user who submitted the request.Finally, it return
 
         );
     }
-    
+
     function JsonResponse(): JsonResponse
     {
         $code = 201;
         $msg = "success";
         $data = ['name' => "sakib", "age" => 13];
         return response()->json(['msg' => $msg, "data" => $data], $code);
+    }
+
+    // redirected to demoaction route
+
+    function redirectResponse(){
+       return  redirect('/demoaction');
+    }
+
+    function fileBinary(){
+        $photoFIle='upload/image/BMI-Calculator.png';
+        return response()->file($photoFIle);
+    }
+
+    function fileDOwnload(){
+        $photoFIle='upload/image/BMI-Calculator.png';
+        return response()->download($photoFIle);
+    }
+
+    //generating response cookie
+    function responseCookie(){
+        $name="response_cookie";
+        $value="srz13";
+        $minutes=140;
+        $path="/";
+        $domain=$_SERVER['SERVER_NAME'];
+        $secure=false;
+        $httpOnly=true;
+
+        return response('Hello World')->cookie(
+            $name, $value, $minutes, $path, $domain, $secure, $httpOnly
+        );
     }
 }
