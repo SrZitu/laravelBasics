@@ -14,4 +14,14 @@ class BladePracticeController extends Controller
         $data = ['result' => $sum];
         return view('page.home', $data);
     }
+    function  dataRetrive()
+    {
+        $users = [
+            ['name' => "sazzadur ", 'job' => "Laravel Developer"],
+            ['name' => "sakibur ", 'job' => "Assistant Engineer"],
+            ['name' => "shahriar ", 'job' => "AI Engineer"],
+            ['name' => "Zahinul ", 'job' => "BB AD"]
+        ];
+        return view('page.foreachData', ['users' => $users]);
+    }
 }

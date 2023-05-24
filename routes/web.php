@@ -67,3 +67,5 @@ Route::post('/submit', function (Request $request) {
 //module 15 Blade Practicing Route
 
 Route::get('/{num1}/{num2}',[BladePracticeController::class,'page']);
+
+Route::get('/dataRetrive', [BladePracticeController::class, 'dataRetrive']);
