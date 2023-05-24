@@ -10,7 +10,7 @@ class DemoController extends Controller
 {
     public function demoAction()
     {
-        return "Hello from Demo Controller";
+        return 'Hello from Demo Controller';
     }
 
     /*
@@ -22,15 +22,14 @@ to get the name and age of the user who submitted the request.Finally, it return
     {
         $name = $request->name;
         $age = $request->age;
-        return  "Name is  $name and age is  $age";
+        return "Name is  $name and age is  $age";
     }
 
     public function requestBody(Request $request): array
     {
-
         //returning all the json data as array
         //if we want  to save data from json body then we use $request->input
-        return  $request->input();
+        return $request->input();
     }
 
     public function requestHeader(Request $request): string
@@ -40,7 +39,7 @@ to get the name and age of the user who submitted the request.Finally, it return
         $address = $request->header('address');
         //returning all the json data as array
         // return  $request->header();
-        return  "Name is  $name and age is  $age and address is $address";
+        return "Name is  $name and age is  $age and address is $address";
     }
 
     public function extractAllRequest(Request $request): array
@@ -52,13 +51,13 @@ to get the name and age of the user who submitted the request.Finally, it return
         $postcode = $request->input(key: 'postcode');
 
         //returning all the extract value as array
-        return array(
-            "name" => $name,
-            "age" => $age,
-            "pin" => $pin,
-            "city" => $city,
-            "postcode" => $postcode
-        );
+        return [
+            'name' => $name,
+            'age' => $age,
+            'pin' => $pin,
+            'city' => $city,
+            'postcode' => $postcode,
+        ];
     }
 
     function MultipartFormData(Request $request): array
@@ -70,13 +69,13 @@ to get the name and age of the user who submitted the request.Finally, it return
         $tempFileName = $img->getFilename();
         $extension = $img->extension($img);
 
-        return array(
+        return [
             'fileSize' => $fileSize,
             'filetType' => $filetType,
             'originalName' => $originalName,
             'tempFileName' => $tempFileName,
             'extension' => $extension,
-        );
+        ];
     }
 
     function FileUpload(Request $request): bool
@@ -115,35 +114,32 @@ to get the name and age of the user who submitted the request.Finally, it return
         //returing this array as json as a response
         //return response()->json(['name'=>"sakib","age"=>13]);
 
-        return array(
-            array(
-                "name" => "sazzad",
-                "age" => "30"
-            ),
+        return [
+            [
+                'name' => 'sazzad',
+                'age' => '30',
+            ],
 
-            array(
-                "name" => "zitu",
-                "age" => "29"
-            )
-
-
-
-        );
+            [
+                'name' => 'zitu',
+                'age' => '29',
+            ],
+        ];
     }
 
     function JsonResponse(): JsonResponse
     {
         $code = 201;
-        $msg = "success";
-        $data = ['name' => "sakib", "age" => 13];
-        return response()->json(['msg' => $msg, "data" => $data], $code);
+        $msg = 'success';
+        $data = ['name' => 'sakib', 'age' => 13];
+        return response()->json(['msg' => $msg, 'data' => $data], $code);
     }
 
     // redirected to demoaction route
 
     function redirectResponse()
     {
-        return  redirect('/demoaction');
+        return redirect('/demoaction');
     }
 
     function fileBinary()
@@ -161,29 +157,21 @@ to get the name and age of the user who submitted the request.Finally, it return
     //generating response cookie
     function responseCookie()
     {
-        $name = "response_cookie";
-        $value = "srz13";
+        $name = 'response_cookie';
+        $value = 'srz13';
         $minutes = 140;
-        $path = "/";
+        $path = '/';
         $domain = $_SERVER['SERVER_NAME'];
         $secure = false;
         $httpOnly = true;
 
-        return response('Hello World')->cookie(
-            $name,
-            $value,
-            $minutes,
-            $path,
-            $domain,
-            $secure,
-            $httpOnly
-        );
+        return response('Hello World')->cookie($name, $value, $minutes, $path, $domain, $secure, $httpOnly);
     }
 
     //ataching headers to response
     function attachHeaderResponse()
     {
-        return response("hello")
+        return response('hello')
             ->header('header 1', '111')
             ->header('header 2', '112');
     }
@@ -204,7 +192,6 @@ to get the name and age of the user who submitted the request.Finally, it return
     the system error log, and even to Slack to notify your entire team.
     */
     function logs(Request $request): int
-
     {
         $sum = $request->num1 + $request->num2;
         Log::info($sum);
@@ -265,7 +252,6 @@ Write the code to accomplish this and store the value in a variable called $user
 */
     function userAgent(Request $request): string
     {
-
         $userAgent = $request->header('User-Agent');
         return $userAgent;
     }
@@ -276,19 +262,19 @@ You are building an API endpoint in Laravel that accepts a GET request with a 'p
 Write the code to retrieve the value of the 'page' parameter from the current request and store it in a variable called $page.
 If the parameter is not present, set $page to null.
 */
-public function page(Request $request, $page="null")
-{
-    $page= response()->json(['page' => $page]);
-    return $page;
-}
+    public function page(Request $request)
+    {
+        $page = response()->query('page', null);
+        return $page;
+    }
 
     /*Question 4:
 Create a JSON response in Laravel with the following data:
 */
     function responseJson(): JsonResponse
     {
-        $message = "Success";
-        $data = ["name=" => "John Doe", "age" => "25"];
+        $message = 'Success';
+        $data = ['name=' => 'John Doe', 'age' => '25'];
         return response()->json(['message' => $message, 'data' => $data]);
     }
 
@@ -314,7 +300,7 @@ and store it in a variable called $rememberToken. If the cookie is not present, 
         $rememberToken = $request->cookie('remember_token', null);
         return $rememberToken;
     }
-/*
+    /*
 Question 7:
 Create a route in Laravel that handles a POST request to the '/submit' URL.
 Inside the route closure, retrieve the 'email' input parameter from the request
@@ -324,5 +310,4 @@ and store it in a variable called $email. Return a JSON response with the follow
     "message": "Form submitted successfully."
 }
 */
-
 }

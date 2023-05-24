@@ -1,7 +1,9 @@
 <?php
 
-use App\Http\Controllers\DemoController;
+use App\Http\Controllers\BladePracticeController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DemoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,10 +15,6 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-Route::get('/', function () {
-    return view('welcome');
-});
 
 Route::get('/hello', function () {
     return "Hello World";
@@ -45,20 +43,27 @@ Route::get('/sessionPull}',  [DemoController::class, 'sessionPull']);
 Route::get('/sessionGet}',  [DemoController::class, 'sessionGet']);
 Route::get('/sessionForget}',  [DemoController::class, 'sessionForget']);
 Route::get('/sessionFlush}',  [DemoController::class, 'sessionFlush']);
+
+//module 14 assignment routes
 Route::post('/retriveName',  [DemoController::class, 'retriveName']);
 Route::post('/userAgent',  [DemoController::class, 'userAgent']);
-Route::get('/page/{page?}', [DemoController::class, 'page']);
+Route::get('/page', [DemoController::class, 'page']);
 Route::get('/responseJson',  [DemoController::class, 'responseJson']);
 Route::post('/fileUP',  [DemoController::class, 'fileUP']);
 Route::get('/rememberCookie',  [DemoController::class, 'rememberCookie']);
-Route::post('/submit', function (Illuminate\Http\Request $request) {
+Route::post('/submit', function (Request $request) {
     $email = $request->input('email');
-
-    $responseData = [
-        'success' => true,
-        'message' => 'Form submitted successfully.'
-    ];
-
-    return response()->json($responseData);
+    if ($email) {
+        $responseData = [
+            'success' => true,
+            'message' => 'Form submitted successfully.'
+        ];
+        return response()->json($responseData);
+    } else {
+        return "Please Enter Email";
+    }
 });
 
+//module 15 Blade Practicing Route
+
+Route::get('/{num1}/{num2}',[BladePracticeController::class,'page']);
