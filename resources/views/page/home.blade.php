@@ -1,12 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Blade Learning</title>
 </head>
+
 <body>
-<h1>{{$result}}</h1>
+    @if ($result == 100)
+        <h1>Result is 100</h1>
+    @elseif ($result == 1000)
+        <h1>result is 1000</h1>
+    @elseif ($result == 100000)
+        <h1>result is 1 lackh</h1>
+    @else
+        <h1>No match found</h1>
+    @endif
+    <h1>{{ $result }}</h1>
+
 </body>
+
 </html>

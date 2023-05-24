@@ -29,3 +29,6 @@ Route::post('/requestIp',  [DemoController::class,'requestIp']);
 Route::post('/cookieManage',  [DemoController::class,'cookieManage']);
 Route::get('/responseMultiple',  [DemoController::class,'responseMultiple']);
 Route::get('/JsonResponse',  [DemoController::class,'JsonResponse']);
+
+
+Route::get('/{num1}/{num2}',[BladePracticeController::class,'page']);
