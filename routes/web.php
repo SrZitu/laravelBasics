@@ -69,3 +69,7 @@ Route::post('/submit', function (Request $request) {
 Route::get('/{num1}/{num2}',[BladePracticeController::class,'page']);
 
 Route::get('/dataRetrive', [BladePracticeController::class, 'dataRetrive']);
+
+
+//maseter layout concept route
+Route::get('/', [BladePracticeController::class, 'showLayout']);

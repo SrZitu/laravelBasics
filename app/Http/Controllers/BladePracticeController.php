@@ -24,4 +24,7 @@ class BladePracticeController extends Controller
         ];
         return view('page.foreachData', ['users' => $users]);
     }
+    function showLayout(){
+        return view('home');
+    }
 }
