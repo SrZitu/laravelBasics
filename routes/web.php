@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\BladePracticeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\DemoMiddleware;
 use App\Http\Controllers\DemoController;
+use App\Http\Controllers\BladePracticeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,6 +67,8 @@ Route::post('/submit', function (Request $request) {
 
 //module 15 Blade Practicing Route
 
+Route::get('/checkRequest',[BladePracticeController::class,'checkRequest'])->middleware([DemoMiddleware::class]);
+
 Route::get('/{num1}/{num2}',[BladePracticeController::class,'page']);
 
 Route::get('/dataRetrive', [BladePracticeController::class, 'dataRetrive']);
@@ -73,3 +76,4 @@ Route::get('/dataRetrive', [BladePracticeController::class, 'dataRetrive']);
 
 //maseter layout concept route
 Route::get('/', [BladePracticeController::class, 'showLayout']);
+

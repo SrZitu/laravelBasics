@@ -27,4 +27,8 @@ class BladePracticeController extends Controller
     function showLayout(){
         return view('home');
     }
+
+    function checkRequest(){
+        return "HLLO FROM SRZ";
+    }
 }
