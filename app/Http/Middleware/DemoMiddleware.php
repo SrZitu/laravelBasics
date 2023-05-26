@@ -26,10 +26,10 @@ class DemoMiddleware
 
         //manipulating request header
         //adding email to header
-        //$request->headers->add(['email' => "sazzad@gmail.com"]);
+        $request->headers->add(['email' => "sazzad@gmail.com"]);
 
         //incase of remove we just need to define key
-        $request->headers->remove('email');
+        //$request->headers->remove('email');
 
         //replace data using middleware
         //$request->headers->replace(['email'=>"zitu094@gmail.com"]);

@@ -85,6 +85,7 @@ Route::get('/hello3/{key}', [BladePracticeController::class, 'hello3']);
 
 //Manipulate Request using middleware
 Route::get('/manipulateRequest',[BladePracticeController::class,'manipulateRequest'])->middleware([DemoMiddleware::class]);
+Route::get('/rateLimiting',[BladePracticeController::class,'manipulateRequest'])->middleware(['throttle:5,1']);
 
 Route::get('/{num1}/{num2}',[BladePracticeController::class,'page']);
 
