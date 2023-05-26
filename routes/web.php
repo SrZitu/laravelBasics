@@ -70,7 +70,7 @@ Route::post('/submit', function (Request $request) {
 //Middleware
 // Route::get('/checkRequest',[BladePracticeController::class,'checkRequest'])->middleware([DemoMiddleware::class]);
 // Route::get('/redeirect1',[BladePracticeController::class,'redeirect1'])->middleware([DemoMiddleware::class]);
-// Route::get('/redeirect2',[BladePracticeController::class,'redeirect2'])->middleware([DemoMiddleware::class]);
+//Route::get('/redeirect2',[BladePracticeController::class,'redeirect2'])->middleware([DemoMiddleware::class]);
 
 //middilware to a group route
 Route::middleware(['demo'])->group(function(){
@@ -80,7 +80,8 @@ Route::middleware(['demo'])->group(function(){
 
 });
 
-
+//applying global middleware to this
+Route::get('/hello3/{key}', [BladePracticeController::class, 'hello3']);
 
 Route::get('/{num1}/{num2}',[BladePracticeController::class,'page']);
 
