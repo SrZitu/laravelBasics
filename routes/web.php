@@ -67,7 +67,20 @@ Route::post('/submit', function (Request $request) {
 
 //module 15 Blade Practicing Route
 
-Route::get('/checkRequest',[BladePracticeController::class,'checkRequest'])->middleware([DemoMiddleware::class]);
+//Middleware
+// Route::get('/checkRequest',[BladePracticeController::class,'checkRequest'])->middleware([DemoMiddleware::class]);
+// Route::get('/redeirect1',[BladePracticeController::class,'redeirect1'])->middleware([DemoMiddleware::class]);
+// Route::get('/redeirect2',[BladePracticeController::class,'redeirect2'])->middleware([DemoMiddleware::class]);
+
+//middilware to a group route
+Route::middleware(['demo'])->group(function(){
+    Route::get('/hello1/{key}', [BladePracticeController::class, 'hello1']);
+    Route::get('/hello2/{key}', [BladePracticeController::class, 'hello2']);
+    Route::get('/hello3/{key}', [BladePracticeController::class, 'hello3']);
+
+});
+
+
 
 Route::get('/{num1}/{num2}',[BladePracticeController::class,'page']);
 

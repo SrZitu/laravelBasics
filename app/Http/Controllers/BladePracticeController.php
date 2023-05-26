@@ -24,11 +24,35 @@ class BladePracticeController extends Controller
         ];
         return view('page.foreachData', ['users' => $users]);
     }
-    function showLayout(){
+    function showLayout()
+    {
         return view('home');
     }
 
-    function checkRequest(){
+    //Middleware
+    function checkRequest()
+    {
         return "HLLO FROM SRZ";
+    }
+
+    function redeirect1()
+    {
+        return "from redirect 1";
+    }
+    function redeirect2()
+    {
+        return "from redirect 2";
+    }
+    function hello1()
+    {
+        return "from hello 1";
+    }
+    function hello2()
+    {
+        return "from hello 2";
+    }
+    function hello3()
+    {
+        return "from hello 3";
     }
 }

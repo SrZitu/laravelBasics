@@ -13,13 +13,15 @@ class DemoMiddleware
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next)
     {
-        $key = $request->header('key');
+        // $key = $request->query('key');
+        $key = $request->key;
         if ($key == '123') {
             return $next($request);
         } else {
-            return response()->json('unauthorized access', 401);
+            // Redirect to the desired URL
+            return response()->json('unauthorized', 401);
         }
     }
 }
