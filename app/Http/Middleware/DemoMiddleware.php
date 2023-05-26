@@ -15,13 +15,24 @@ class DemoMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        $key = $request->key;
-        if ($key == '123') {
-            return $next($request);
-        } else {
-            // Redirect to the desired URL
-            //return redirect("/redirect2");
-            return response()->json('unauthorized', 401);
-        }
+        // $key = $request->key;
+        // if ($key == '123') {
+        //     return $next($request);
+        // } else {
+        //     // Redirect to the desired URL
+        //     //return redirect("/redirect2");
+        //     return response()->json('unauthorized', 401);
+        // }
+
+        //manipulating request header
+        //adding email to header
+        //$request->headers->add(['email' => "sazzad@gmail.com"]);
+
+        //incase of remove we just need to define key
+        $request->headers->remove('email');
+
+        //replace data using middleware
+        //$request->headers->replace(['email'=>"zitu094@gmail.com"]);
+        return $next($request);
     }
 }

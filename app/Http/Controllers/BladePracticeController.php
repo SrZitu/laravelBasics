@@ -55,4 +55,10 @@ class BladePracticeController extends Controller
     {
         return "from hello 3";
     }
+
+    //manipulate request
+   function manipulateRequest(Request $request){
+    $result= $request->header();
+    return response()->json($result);
+   }
 }

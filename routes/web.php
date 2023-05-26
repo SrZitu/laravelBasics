@@ -73,15 +73,18 @@ Route::post('/submit', function (Request $request) {
 //Route::get('/redeirect2',[BladePracticeController::class,'redeirect2'])->middleware([DemoMiddleware::class]);
 
 //middilware to a group route
-Route::middleware(['demo'])->group(function(){
-    Route::get('/hello1/{key}', [BladePracticeController::class, 'hello1']);
-    Route::get('/hello2/{key}', [BladePracticeController::class, 'hello2']);
-    Route::get('/hello3/{key}', [BladePracticeController::class, 'hello3']);
+// Route::middleware(['demo'])->group(function(){
+//     Route::get('/hello1/{key}', [BladePracticeController::class, 'hello1']);
+//     Route::get('/hello2/{key}', [BladePracticeController::class, 'hello2']);
+//     Route::get('/hello3/{key}', [BladePracticeController::class, 'hello3']);
 
-});
+// });
 
 //applying global middleware to this
 Route::get('/hello3/{key}', [BladePracticeController::class, 'hello3']);
+
+//Manipulate Request using middleware
+Route::get('/manipulateRequest',[BladePracticeController::class,'manipulateRequest'])->middleware([DemoMiddleware::class]);
 
 Route::get('/{num1}/{num2}',[BladePracticeController::class,'page']);
 
