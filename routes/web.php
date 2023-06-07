@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\DemoMiddleware;
 use App\Http\Controllers\DemoController;
 use App\Http\Controllers\BladePracticeController;
+use App\Http\Controllers\CraftController;
+use App\Http\Controllers\CustomerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -94,3 +96,10 @@ Route::get('/dataRetrive', [BladePracticeController::class, 'dataRetrive']);
 
 //maseter layout concept route
 Route::get('/', [BladePracticeController::class, 'showLayout']);
+
+
+//query builder
+Route::resource('customer', CustomerController::class);
+
+//craft shop
+Route::get('/users',[CraftController::class,'demoAction']);
