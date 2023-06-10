@@ -275,5 +275,78 @@ class CraftController extends Controller
         //         ['updated_at', '<', 'created_at'],
         //     ])->get();
         // return $data;
+
+        /* ===============  -> orderBy()  ===============
+        The orderBy method allows you to sort the results of the query by a given column.
+        The first argument accepted by the orderBy method should be the column you wish to sort by,
+        while the second argument determines the direction of the sort and may be either asc or desc:
+
+       */
+
+        // $data = DB::table('brands')
+        //   ->orderBy('brandName', 'desc')
+        //   ->get();
+        // return $data;
+
+        // $data = DB::table('products')
+        //   ->oldest()
+        //   ->first();
+        // return $data;
+
+        //    $data = DB::table('products')
+        //       ->latest()
+        //       ->first();
+        //     return $data;
+
+        //  $data = DB::table('products')
+        //           ->inRandomOrder()
+        //           ->first();
+        //         return $data;
+
+
+        /* ===============  ->The groupBy & having Methods()  ===============
+      As you might expect, the groupBy and having methods may be used to group the query results.
+      The having method's signature is similar to that of the where method:
+
+       */
+
+        // $data = DB::table('products')
+        //     ->groupBy('price')
+        //     ->having('price',"<",'1000')
+        //     ->get();
+        // return $data;
+
+        // $data = DB::table('products')
+        //     ->groupBy('price')
+        //     ->having('price', '>', 1000)
+        //     ->get();
+
+        // return $data;
+
+        // $data = DB::table('products')
+        //         ->groupBy('price')
+        //         ->havingBetween('price',[20,1000])
+        //         ->get();
+
+        //     return $data;
+
+
+        /* ===============  -> The skip & take Methods()  ===============
+        You may use the skip and take methods to limit the number of results returned from the query
+        or to skip a given number of results in the query:
+       */
+
+        //    $data=DB::table('products')
+        //    ->skip(10)
+        //    ->take(3)
+        //    ->get();
+        //    return $data;
+
+        /* ===============  Insert Statements  ===============
+        The query builder also provides an insert method that may be used to insert records into the database table.
+        The insert method accepts an array of column names and values::
+       */
+
+       
     }
 }
