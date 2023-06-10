@@ -346,7 +346,64 @@ class CraftController extends Controller
         The query builder also provides an insert method that may be used to insert records into the database table.
         The insert method accepts an array of column names and values::
        */
+        // $data = DB::table('brands')
+        //     ->insert([
+        //         'brandName' => 'Xio',
+        //         'brandImg' => 'new image'
+        //     ]);
 
-       
+        // return $data;
+
+
+        // $data = DB::table('brands')
+        //     ->insertOrIgnore([[
+        //         'id'=>10,
+        //         'brandName' => 'Xio',
+        //         'brandImg' => 'new image'
+        //     ],[
+        //         'id'=>11,
+        //         'brandName' => 'symphone',
+        //         'brandImg' => 'symphonet image'
+        //     ],
+        //     ] );
+
+        // return $data;
+
+        // $data = DB::table('brands')
+        //     ->upsert(
+        //         [
+        //             'id' => 10,
+        //             'brandName' => 'Pixel',
+        //             'brandImg' => 'new image'
+        //         ],
+        //         [
+        //             'id',
+        //             'brandName',
+        //             'brandImg'
+        //         ]
+        //     );
+
+        // return $data;
+
+        // $data = DB::table('brands')
+        //     ->where('id', 9)
+        //     ->update([
+        //         'brandName' => 'Realme',
+        //         'brandImg' => 'Realme image'
+        //     ]);
+        // return $data;
+
+        // $data = DB::table('brands')
+        //     ->where('id', 11)
+        //     ->delete();
+        // return $data;
+
+
+        //DELETE All data in the TABLE
+        // $data = DB::table('brands')
+        //     ->truncate()
+        // return $data;
+
+
     }
 }
