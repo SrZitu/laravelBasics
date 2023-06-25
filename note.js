@@ -152,6 +152,20 @@ retrieve its id in a single query
 dd($posts);
 
 
+
+
+
+$posts = [
+    ['title' => 'Post 1', 'slug' => 'post-1', 'content' => 'Lorem ipsum dolor sit amet.'],
+    ['title' => 'Post 2', 'slug' => 'post-2', 'content' => 'Lorem ipsum dolor sit amet.'],
+    ['title' => 'Post 3', 'slug' => 'post-3', 'content' => 'Lorem ipsum dolor sit amet.'],
+];
+
+$result = DB::table('posts')->insertOrIgnore($posts);
+
+dd($result);
+
+
 11.  upsert()
         $posts = DB::table('posts')->upsert([
             [
@@ -275,7 +289,7 @@ dd($updated);
 
 26.// Min
         DB::table('posts')->where('is_published', true)->min('min_to_read');
-        
+
 27.// whereNot()
         DB::table('posts')->whereNot('min_to_read', 1)->get();
         DB::table('posts')->whereNot('min_to_read', '>', 1)->get();
@@ -305,5 +319,802 @@ dd($updated);
 
 32. //whereNotBetween()
         DB::table('posts')->whereNotBetween('min_to_read', [1, 5])->get();
+
+*/
+
+/*
+👉 Query Builder Advance Topics
+👉php artisan make:migration set_description_to_text_on_posts_table --table=posts //this is for fulltext index part
+
+👉 Database Transactions
+
+php artisan migrate:refresh
+php artisan tinker
+User::factory(20)->create()
+App\Models\Post::factory(50)->create()
+
+33. Database Transactions:
+
+DB::transaction(function () {
+            DB::table('users')
+                ->where('id', 1)
+                ->decrement('balance', 20);
+
+            DB::table('users')
+                ->where('id', 2)
+                ->increment('balance', 20);
+        });
+
+34. Pessimistic Locking :
+
+  DB::transaction(function () {
+
+👉way1
+            DB::table('users')
+                ->where('id', 1)
+                ->lockForUpdate()
+                ->decrement('balance', 100);
+
+            DB::table('users')
+                ->where('id', 2)
+                ->lockForUpdate()
+                ->increment('balance', 100);
+
+👉way2
+
+             DB::table('users')
+              ->where('id', 1)
+              ->sharedLock()
+              ->decrement('balance', 100);
+
+        });
+
+35. 👉 Chunking Data
+👉The chunk() method retrieves data in smaller more manageable "chunks" rather than
+getting all data and chunking it afterwards
+
+ DB::table('posts')
+            ->orderBy('id')
+            ->chunk(150, function($posts) {
+                foreach ($posts as $post) {
+                    echo $post->title;
+                }
+            });
+
+36. 👉 Streaming Results Lazily
+
+ 👉 lazy():The lazy() method is used to retrieve a large number of records without overwhelming
+the server's memory
+
+        DB::table('posts')
+            ->orderBy('id')
+            ->lazy()->each(function($post) {
+                echo $post->title;
+            });
+
+
+👉 lazilyById()
+
+        DB::table('posts')
+            ->where('id', 1)
+            ->lazyById()
+            ->first();
+
+37.👉Raw Methods:
+
+👉 selectRaw()
+        DB::table('posts')
+            ->selectRaw('count(*) as post_count')
+            ->first();
+
+👉 whereRaw()
+        DB::table('posts')
+            ->whereRaw('created_at > NOW() - INTERVAL 1 DAY')
+            ->get();
+
+👉 havingRaw()
+        DB::table('posts')
+            ->select('user_id', DB::raw('SUM(min_to_read) as total_time'))
+            ->groupBy('user_id')
+            ->havingRaw('SUM(min_to_read) > 10')
+            ->get();
+
+👉orderByRaw()
+        DB::table('posts')
+            ->orderByRaw('created_at DESC')
+            ->get();
+
+👉groupByRaw()
+        DB::table('posts')
+            ->select('user_id', DB::raw('AVG(rating) as avg_rating'))
+            ->groupByRaw('user_id')
+            ->get();
+38. 👉 Ordering through the query builder:
+
+👉The orderBy() method allows you to sort your query results by a specific column
+in ascending or descending order.
+👉The latest() and oldest() methods allows you to sort your query results by the
+created_at timestamp in descending and ascending order
+
+👉one orderBy()
+        DB::table('posts')
+            ->orderBy('title', 'desc')
+            ->get();
+
+👉 multiple orderBy() methods
+        DB::table('posts')
+            ->orderBy('title')
+            ->orderBy('min_to_read')
+            ->get();
+
+👉latest()
+        DB::table('posts')
+            ->latest()
+            ->get();
+
+👉oldest()
+        DB::table('posts')
+            ->oldest()
+            ->get();
+
+
+39. 👉 Full text Indexes :
+
+    👉 We have the wherefulltext() and orWhereFullText() methods, which both are
+       used to add full text "where" clauses to a query for columns that have
+       full text indexes.
+
+    👉 "Natural Language Mode" is a feature of full text search that allows
+       users to search for words or phrases using natural language syntax.
+
+    👉 php artisan make:migration set_description_to_text_on_posts_table --table=posts
+
+ 👉 whereFullText()
+        DB::table('posts')
+            ->whereFullText('description', 'quo')
+            ->get();
+
+👉 orWhereFullText()
+        DB::table('posts')
+            ->whereFullText('description', 'quo')
+            ->orWhereFullText('description', 'Doloribus')
+            ->get();
+
+40.👉 Limit and Offset through query builder :
+👉 The limit() method is used to limit the number of records that are
+returned from a query.
+👉 The offset() method is used to skip a specified number of records from
+the begining of a query.
+
+👉limit()
+
+        DB::table('posts')->limit(10)->get();
+
+👉 offset()
+
+        DB::table('posts')->offset(10)->limit(10)->get();
+
+
+41.👉 Conditional Clause :
+👉  DB::table('posts')
+            ->when(function ($query) {
+                return $query->where('is_published', true);
+            })->get();
+
+
+
+42.👉Removing Existing Ordering :
+👉$posts = DB::table('posts')
+            ->orderBy('is_published');
+
+        $unorderedPosts = $posts->reorder()->get();
+
+        dd($unorderedPosts);
+
+
+👉  $posts = DB::table('posts')
+            ->orderBy('is_published');
+
+$unorderedPosts = $posts->reorder('title', 'desc')->get();
+    dd($unorderedPosts);
+
+42. 👉 Paginate Method
+👉$posts = DB::table( 'posts' )->paginate( 10 );
+  dd($posts);
+
+👉 $posts = DB::table( 'posts' )->paginate( 10, ['*'], 'p', 1 );
+dd($posts);
+
+👉 $posts = DB::table( 'posts' )->paginate( 10, ['*'], 'p', 1 );
+
+   return view( 'posts.index', compact( 'posts' ) );
+
+👉 $posts = DB::table( 'posts' )->paginate( 10);
+
+   return view( 'posts.index', compact( 'posts' ) );
+
+
+43.👉simplePaginate() Method :
+
+👉 $posts = DB::table('posts')->simplePaginate(10);
+
+        return view('posts.index', compact('posts'));
+
+
+44.👉 cursorPaginate() Method :
+
+👉$posts = DB::table('posts')
+            ->orderBy('id')
+            ->cursorPaginate(10);
+
+        return view('posts.index', compact('posts'));
+
+
+*/
+
+
+/*====================================================================================
+                                👉Eloquent ORM
+=====================================================================================
+👉In the Post Model
+
+✅Change table
+     protected $table = 'users';
+
+✅Change primary key
+    protected $primaryKey = 'slug';
+
+✅Disable auto increment of the primary key
+    public $incrementing = false;
+
+✅Change data type of the primary key
+    protected $keyType = 'string';
+
+✅Disable timestamps on a model
+    public $timestamps = false;
+
+✅Change dateTime format of timestamps
+    public $timestamps = false;
+
+✅Rename the created_at and updated_at
+    const CREATED_AT = 'date_created_at';
+    const UPDATED_AT = 'date_updated_at';
+
+✅Add default attributes to your model ( recommended doing this on database-level
+    protected $attributes = [
+       "user_id" => 1,
+        "is_published" => false,
+        "description" => "Please add your description right here.."
+    ];
+
+✅Change default database connection
+    protected $connection = 'sqlite';
+
+👉 In the User Model :
+
+✅ The attributes that are mass assignable.
+
+    protected $fillable = [
+    'name',
+    'email',
+    'password',
+];
+
+
+✅ The attributes that should be hidden for serialization.
+
+    protected $hidden = [
+    'password',
+    'remember_token',
+];
+
+✅The attributes that should be cast.
+
+    protected $casts = [
+    'email_verified_at' => 'datetime',
+];
+
+*/
+
+
+
+/*
+✅Fillable Property
+
+     The `$fillable` property is an array that lists the fields that are allowed to be mass assigned.
+     Any field not listed in the `$fillable` array will not be allowed to be mass assigned.
+     This is useful when you want to allow the user to set specific fields of the model.
+
+    protected $fillable = [
+    "user_id",
+    "title",
+    "slug",
+    "excerpt",
+    "description",
+    "is_published",
+    "min_to_read"
+];
+
+
+  ✅ Guarded Property
+     The $guarded property is an array that lists the fields that are not allowed to be mass assigned.
+     Any field not listed in the $guarded array will be allowed to be mass assigned.
+     This is useful when you want to prevent the user from setting specific fields of the model.
+
+    protected $guarded = ['is_published'];
+
+
+*/
+
+/*
+👉 Building Queries:
+
+✅ Post::where('is_published',true)->get();
+
+✅ Post::where('is_published',true)
+->where('min_to_read','>',5)
+->orderBy('title','desc')
+->get();
+
+✅ Post::where('is_published',true)
+->where('min_to_read','>',5)
+->orderBy('title','desc')
+->get()
+->count();
+
+✅Post::where('is_published',true)
+  ->cursorPaginate(10);
+
+✅ Find() method is used to retrieve a specific row from the database based
+on the primary key
+✅ The first() method is needed because we want to find one row based on a condition
+✅ The firstWhere() method is used to retrieve a specific post by a custom attribute
+✅ The firstOrFail() method is a method used to retrieve a specific row from
+the database based on a custom attribute.
+
+👉Retrieve based on the primary key (RETURNS NULL)
+        Post::find(1000);
+
+👉Retrieve based on the primary key (RETURNS ERROR)
+        Post::findOrFail(1000);
+
+👉 Retrieve based on a condition
+      ✅  Post::where('slug', 'ullam-rerum-rem-esse-voluptatem-non-necessitatibus-iste-hic')
+        ->first();
+
+      ✅  Post::firstWhere('slug', 'est-cum-odit-tempora-voluptates-quis-eligendi');
+
+👉Retrieve a specific row based on a custom attribute
+        Post::where('slug', 'est-cum-odit-tempora-voluptates-quis-eligendi')
+        ->firstOrFail();
+
+
+*/
+
+/*
+👉 Inserting/Creating Models :
+✅ Model instance refers to an instance of a model class, which is a representation
+of a database table
+
+ ✅ Model Instance
+
+        $post = new Post;
+
+        $post->user_id = 17;
+        $post->title = "Test Title";
+        $post->slug = "test-title";
+        $post->excerpt = "woohoo";
+        $post->description = "Test";
+        $post->is_published = true;
+        $post->min_to_read = 3;
+        $post->save();
+
+✅Using the fill() method
+
+        $post = new Post;
+        $post->fill([
+            "user_id" => 17,
+            "title" => "Fill method",
+            "slug" => "fill-method",
+            "excerpt" => "fill method",
+            "description" => "fill method",
+            "is_published" => true,
+            "min_to_read" => 3
+        ]);
+
+✅ Using Eloquent magic with the create() method
+
+        Post::create([
+            "user_id" => 17,
+            "title" => "Eloquent is Awesome",
+            "slug" => "eloquent-is-awesome",
+            "excerpt" => "Eloquent is awesome!!",
+            "description" => "Even more awesome!!",
+            "is_published" => true,
+            "min_to_read" => 3
+        ]);
+
+✅ Using the make() method
+        Post::make([
+            "user_id" => 17,
+            "title" => "Eloquent is Awesome3",
+            "slug" => "eloquent-is-awesome3",
+            "excerpt" => "Eloquent is awesome!!",
+            "description" => "Even more awesome!!",
+            "is_published" => true,
+            "min_to_read" => 3
+        ]);
+
+
+
+*/
+
+
+/*
+👉 Retrieving all models :
+
+ ✅Retrieve all models
+        Post::all();
+
+✅ Retrieve the count of all Models
+        Post::all()->count();
+
+✅Paginate through the Query Builder
+        Post::paginate(25);
+        Post::simplePaginate(25);
+        Post::cursorPaginate(25);
+
+*/
+
+
+/*
+
+👉 firstOrCreate and firstOrNew Method :
+
+✅ firstOrCreate()
+
+        Post::firstOrCreate([
+                'title' => 'Eloquent is Awesome'
+            ],
+            [
+                "user_id" => 17,
+                "title" => "firstOrCreate",
+                "slug" => "first-or-create",
+                "excerpt" => "Eloquent is awesome!!",
+                "description" => "Even more awesome!!",
+                "is_published" => true,
+                "min_to_read" => 3
+            ]
+        );
+
+✅ firstOrNew()
+
+      $post=  Post::firstOrNew([
+                'title' => 'firstOrCreate3'
+            ],
+            [
+                "user_id" => 17,
+                "title" => "firstOrCreate NEW",
+                "slug" => "first-or-create NEW",
+                "excerpt" => "Eloquent is awesome!!",
+                "description" => "Even more awesome!!",
+                "is_published" => true,
+                "min_to_read" => 3
+            ]);
+
+    $post->save();
+
+*/
+
+
+/*
+👉 Updating Models
+
+ ✅ Model Instance
+        $post = Post::find(1000); // assuming we want to update post with id 1000
+
+        $post->title = "We have updated the title";
+        $post->description = "And also the description";
+        $post->save();
+
+✅ Using Eloquent (update all rows)
+        Post::where()->update([
+            "excerpt" => "Updated through Eloquent",
+            "slug" => "we-have-updated-the-title"
+        ]);
+
+✅ Using Eloquent (update a single row)
+        Post::where('is_published', false)->update([
+            "is_published" => true
+        ]);
+
+
+
+*/
+
+
+/*
+👉Attribute Changes [isDirty, isClean & wasChanged]
+
+✅isDirty()
+        $post = Post::find(1000);
+        $post->title = "Let's see if the isDity method works...";
+
+
+        $post->isDirty(); // true
+        $post->isDirty('title'); // true
+        $post->isDirty('excerpt'); // false
+        $post->isDirty(['title', 'excerpt']); // true
+
+✅ isClean()
+        $post = Post::find(1000);
+
+        $post->isClean(); //true
+
+        $post = Post::find(1000);
+        $post->title = "It's unclean now!";
+        $post->isClean(); // false
+        $post->isClean('title'); // false
+        $post->isClean(['title', 'excerpt']); // false
+
+✅ wasChanged()
+        $post = Post::find(1000);
+        $post->title = "It's unclean now!";
+        $post->save();
+
+
+*/
+
+
+/*
+👉UpdateOrCreate and Upserting Models
+
+
+ ✅ updateOrCreate()
+
+        $post = Post::updateOrCreate(
+            ['id' => 1000],
+            [
+                "user_id" => 17,
+                "title" => "updateOrCreate",
+                "slug" => "update-or-create",
+                "excerpt" => "Eloquent is awesome!!",
+                "description" => "Even more awesome!!",
+                "is_published" => true,
+                "min_to_read" => 3
+            ]
+        );
+
+✅ upsert()
+        Post::upsert([
+            "id" => 1000,
+            "user_id" => 17,
+            "title" => "Eloquent is Awesome",
+            "slug" => "eloquent-is-awesome",
+            "excerpt" => "Eloquent is awesome!!",
+            "description" => "Even more awesome!!",
+            "is_published" => true,
+            "min_to_read" => 3
+        ], ['id']);
+
+
+*/
+
+/*
+👉Deleting Models
+
+The delete() method is a simple way to delete a single model instance.
+The truncate() is used to delete all records from a table.
+The destroy() method is used to delete multiple records from a table.
+
+✅ Delete a single model
+        $post = Post::find(1080);
+        $post->delete();
+
+✅ Delete all records
+        Post::trunacte();
+
+✅ Delete multiple records
+        Post::destroy([1061, 1060]);
+
+
+*/
+
+
+/*
+👉 Softdelete :
+
+A trait is a way to reuse code in different classes. It's similar to a class but is not intended to be instantiated on its own. Traits can define methods or properties that can be used by the class that includes them allowing you to avoid duplicating code across multiple classes.
+
+✅ use SoftDeletes trait
+
+ ✅Delete a single model
+        $post = Post::find(1080);
+        $post->delete();
+
+✅ Retrieving softdeleted data
+      $posts=  Post::withTrashed()->get()
+
+✅ Restore :
+
+      Post::withTrashed()->where('id',1061)->restore();
+✅ Force Delete :
+
+     $post=Post::withTrashed()->find(1061);
+     $post->forceDelete();
+
+
+✅ Delete all records
+        Post::trunacte();
+
+✅ Delete multiple records
+        Post::destroy([1061, 1060]);
+
+*/
+
+/*
+👉 Pruning models
+
+
+✅ in the post model
+return static::where('deleted_at', '<=', now()->subMonth());
+
+✅ in the console->karnel
+$schedule->command('model:prune')->daily();
+
+
+*/
+
+
+/*
+👉 Replicating Models
+
+ ✅ Create and replicate
+        $post = Post::create([
+            "user_id" => 17,
+            "title" => "Replicating Models",
+            "slug" => "replicating models",
+            "excerpt" => "This tutorial is about replicating content",
+            "description" => "This tutorial is about replicating content",
+            "is_published" => true,
+            "min_to_read" => 3
+        ]);
+
+        $newPost = $post->replicate()->fill([
+            "title" => "Replicated!!",
+            "slug" => "replicated"
+        ]);
+
+✅ Find and replicate
+        $post = Post::find(1084);
+
+        $post->replicate()->fill([
+            'title' => 'We have a new post ladies and gentlemen!',
+            'slug' => 'we-have-a-new-post-ladies-and-gentlemen'
+        ]);
+
+
+*/
+
+
+/*
+👉 Global Scopes :
+
+Global scopes are a powerful feature of eloquent that allow you to add
+constraints to all queries that run against a particular model
+
+✅php artisan make:scope BalanceVerifiedScope
+✅php artisan make:scope PublishedWithinThirtyDaysScope
+
+✅ Retrieve without scope
+        User::withoutGlobalScopes()->get();
+        Post::withoutGlobalScopes()->get();
+
+✅ in apply method:
+$builder->where('balance',  '<', 10000);
+
+✅ in the user model booted method
+
+static::addGlobalScope(new CheckUserBalanceScope());
+
+✅  $builder->where('created_at', '>=', now()->subDays(30));
+✅  static::addGlobalScope(new PublishedWithinThirtyDaysScope());
+
+
+*/
+
+/*
+👉 Local Scopes :
+Local scopes are a powerful feature in eloquent that enables us to
+define a set of reusable queries on our models
+
+
+
+*/
+
+
+/*
+✅ Relationship :
+
+✅ One to one Relationship
+
+👌 1.Defining foreign key in the contact migration table :
+
+ $table->foreignId('user_id')
+                ->constrained('users')
+                ->cascadeOnDelete();
+
+
+2.In the User model :
+
+ public function contact(): HasOne
+    {
+        return $this->hasOne(Contact::class);
+    }
+
+3.In the Contact Model :
+
+  public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+4. In the postController :
+
+ Create user & model with one instance
+        $user = User::create([
+            'name' => 'Code With Dary',
+            'email' => 'info@codewithdary.com',
+            'password' => 'Test1234!',
+        ]);
+
+        $user->contact()->create([
+            'address' => 'test',
+            'number' => 43,
+            'city' => 'Amsterdam',
+            'zip_code' => '48395db'
+        ]);
+
+
+    Retrieve user with contact data
+        $user = User::with('contact')->find(5);
+
+
+
+     Output contact data
+
+        $user->contact->address;
+
+
+✅ One to Many Relationship :
+
+In the User Model :
+
+ public function posts(): HasMany
+    {
+        return $this->hasMany(Post::class);
+    }
+
+In the Post Model :
+
+ public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+In the PostController :
+
+ ✅ Access individual attributes from relationship
+        $post = Post::find(1000);
+        $user = $post->user->name;
+
+✅ Inverse (retrieves a collection because a user has many posts)
+        $user = User::find(5);
+
+        foreach($user->posts as $post) {
+            echo "Title: $post->title" . "\n";
+        }
+
+
 
 */
