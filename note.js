@@ -1116,5 +1116,19 @@ In the PostController :
         }
 
 
+ ✅ For craftshop making model commands
+
+php artisan make:model User
+php artisan make:model Profile
+php artisan make:model ProductCart
+php artisan make:model ProductWish
+
+php artisan make:model ProductReview
+php artisan make:model Product
+php artisan make:model ProductDetail
+php artisan make:model ProductSlider
+
+php artisan make:model Brand
+php artisan make:model Category
 
 */

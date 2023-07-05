@@ -7,6 +7,7 @@ use App\Http\Controllers\DemoController;
 use App\Http\Controllers\BladePracticeController;
 use App\Http\Controllers\CraftController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\OrmPracticeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -103,3 +104,10 @@ Route::resource('customer', CustomerController::class);
 
 //craft shop
 Route::get('/users',[CraftController::class,'demoAction']);
+
+//ORM Practice In CrafShop
+
+Route::post('/createBrand',[OrmPracticeController::class,'createBrand']);
+Route::post('/updateBrand/{id}',[OrmPracticeController::class,'updateBrand']);
+Route::post('/updateorInsertBrand/{brandName}',[OrmPracticeController::class,'updateorInsertBrand']);
+Route::delete('/deleterand/{id}',[OrmPracticeController::class,'deleterand']);

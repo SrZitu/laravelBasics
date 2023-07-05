@@ -32,3 +32,7 @@ Route::get('/JsonResponse',  [DemoController::class,'JsonResponse']);
 
 
 Route::get('/{num1}/{num2}',[BladePracticeController::class,'page']);
+
+//for orm craft practice routes
+Route::post('/createBrands',[OrmPracticeController::class,'createBrands']);
+Route::post('/updateBrand',[OrmPracticeController::class,'updateBrand']);
