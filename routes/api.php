@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DemoController;
+use App\Http\Controllers\OrmPracticeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,3 +37,4 @@ Route::get('/{num1}/{num2}',[BladePracticeController::class,'page']);
 //for orm craft practice routes
 Route::post('/createBrands',[OrmPracticeController::class,'createBrands']);
 Route::post('/updateBrand',[OrmPracticeController::class,'updateBrand']);
+Route::post('/increase',[OrmPracticeController::class,'increase']);

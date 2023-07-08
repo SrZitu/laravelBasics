@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Brand;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class OrmPracticeController extends Controller
@@ -11,6 +12,8 @@ class OrmPracticeController extends Controller
     {
         return  Brand::create($request->input());
     }
+
+
     public function updateBrand(Request $request)
     {
         return Brand::where('id', $request->id)->update($request->input());
@@ -27,4 +30,28 @@ class OrmPracticeController extends Controller
     {
         return Brand::where('id', $request->id)->delete();
     }
+
+    public function increase()
+    {
+        return Product::where('id', 1)
+            ->increment('price', 100);
+    }
+
+    public function allbrand()
+    {
+        // return Brand::get();
+        return Brand::all();
+    }
+    public function singlebrand()
+    {
+        //    return Brand::first();
+
+        return Brand::find(4);
+    }
+    public function listOfCol()
+    {
+
+        return Brand::pluck('brandName','id');
+    }
+
 }

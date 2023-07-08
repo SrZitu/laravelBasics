@@ -110,4 +110,9 @@ Route::get('/users',[CraftController::class,'demoAction']);
 Route::post('/createBrand',[OrmPracticeController::class,'createBrand']);
 Route::post('/updateBrand/{id}',[OrmPracticeController::class,'updateBrand']);
 Route::post('/updateorInsertBrand/{brandName}',[OrmPracticeController::class,'updateorInsertBrand']);
+
 Route::delete('/deleterand/{id}',[OrmPracticeController::class,'deleterand']);
+Route::post('/increase',[OrmPracticeController::class,'increase']);
+Route::get('/allbrand',[OrmPracticeController::class,'allbrand']);
+Route::get('/singlebrand',[OrmPracticeController::class,'singlebrand']);
+Route::get('/listOfCol',[OrmPracticeController::class,'listOfCol']);
